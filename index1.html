@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Stadtspaziergang Wien</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
@@ -11,26 +10,19 @@
     <script src="stadtspaziergang_punkte.geojson.js">    </script>
     <script src="CITYBIKEOGD.js">    </script>
     <script src="wanderwege_punkte.js"></script>
-	<script src="Markt_Wien.js"></script>
-	<script src="my_geojson.js"></script>
+	
 
     <style>
-	body {
-		padding: 0;
-		margin: 0;
-		}
-	html, body, #wienMap {
-		height: 100vh;
-		width: 100vw;
-		}
-		/*
+        h1 {
+            text-align: center;
+        }
+
         #wienMap {
             width: 900px;
             height: 600px;
             border: 1px solid black;
             margin: auto;
         }
-		*/
     </style>
 </head>
 
@@ -66,11 +58,7 @@
             osm: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 subdomains: ['a', 'b', 'c'],
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            }),
-			lb1956: L.tileLayer("http://{s}.wien.gv.at/wmts/lb1956/grau/google3857/{z}/{y}/{x}.jpeg", {
-                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
-                attribution: 'Datenquelle: Stadt Wien – <a href="data.wien.gv.at">data.wien.gv.at</a>'
-            }),
+            })
         };
 
         // Karte definieren und Ausschnitt setzen
@@ -85,19 +73,7 @@
             maxWidth: 200,
             metric: true,
             imperial: false
-        })//.addTo(map);
-		
-		
-		//var IconCity = L.iconCity({
-			//iconUrl: 'http://www.data.wien.gv.at/icons/citybike.png',
-			//iconSize: [38, 95],
-			//iconAnchor: [22, 94],
-			//popupAnchor: [-3, -76],
-			//shadowUrl: 'https://unpkg.com/leaflet@1.0.3/dist/images/marker-shadow.png',
-			//shadowSize: [68, 95],
-			//shadowAnchor: [22, 94]
-			//});
-			//L.marker([50.505, 30.57], {icon: IconCity}).addTo(map);
+        }).addTo(map);
 
         var iconByCategory = {
             1: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
@@ -106,7 +82,6 @@
             4: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png",
             5: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png",
             6: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png"
-			
         };
         var punkte = L.geoJSON(window.spaziergangPunkte, {
             pointToLayer: function(feature, latlng) {
@@ -121,38 +96,16 @@
                     })
                 });
             }
-           }).bindPopup(function(layer) {
-            var markup = '<h3>' + layer.feature.properties.NAME + '</h3>';
-            markup += '<p>' + layer.feature.properties.BEMERKUNG + '</p>';
-            markup += '<strong>Details</strong>';
-            markup += '<ul>';
-            markup += '<li>' + 'Objekt ID: ' + layer.feature.properties.OBJECTID + '</li>';
-            markup += '<li>' + 'Kategorie: ' + layer.feature.properties.KATEGORIE + '</li>';
-            markup += '<li>' + 'Adresse: ' + layer.feature.properties.ADRESSE + '</li>';
-            markup += '<li>' + '<a href="' + layer.feature.properties.WEITERE_INF + '">Weitere Informationen</a></div>';
-            markup += '<ul>';
-            return markup;
-        })//.addTo(map);
+        }).bindPopup(function(layer) {
+            return layer.feature.properties.NAME;
+        }).addTo(map);
 
 
         var citybikePunkte = L.geoJSON(window.citybikePunkte, {
-			pointToLayer: function(feature, latlng) {
-				return L.marker(latlng, {
-					icon: L.icon({
-					iconUrl: 'http://www.data.wien.gv.at/icons/citybike.png',
-					iconSize: [18, 18],
-					iconAnchor: [9, 9],
-					popupAnchor: [0, -12],
-					});
-                });
-            }   
+
         }).bindPopup(function(layer) {
-            var tipp = '<h3>' + layer.feature.properties.STATION + '</h3>';
-            tipp += '<a href="' + layer.feature.properties.BEZIRK + '">Infos</a>';
-            return tipp;
-        }).addTo(map);
             return layer.feature.properties.STATION;
-        })//.addTo(map);
+        }).addTo(map);
 
         var wanderwegePunkte = L.geoJSON(window.wanderwegePunkte, {
             style: function(feature) {
@@ -170,25 +123,13 @@
             var tipp = '<h3>' + layer.feature.properties.BEZ_TEXT + '</h3>';
             tipp += '<a href="' + layer.feature.properties.URL_INFO + '">Infos</a>';
             return tipp;
-        })//.addTo(map);
+        }).addTo(map);
 		
-		 var MarktWien = L.geoJSON(window.Markt_Wien, {
-			style: function(feature){
-			var farbe = "";
-                if (feature.properties.INFOS_NACHHALTIG == "Produzentenmarkt, Bio-Eck") {
-                  farbe = "yellow"
-                } else {
-                  farbe = "green"
-				}
-                return {
-                color: farbe
-                }
-        
-		}).bindPopup(function(layer) {
-         var tipp = '<h3>' + layer.feature.properties.NAME + '</h3>';
-            tipp += '<a href="' + layer.feature.properties.URL_NACHHALTIG + '">Infos</a>';
-            return tipp;
-        })//.addTo(map);
+	//var MarktWien = L.geoJSON(window.Markt_Wien, {
+
+       // }).bindPopup(function(layer) {
+          //  return layer.feature.properties.INFOS_NACHHALTIG;
+        //}).addTo(map);
 
         // WMTS-Layer Auswahl und Marker Auswahl Overlay hinzufügen
         L.control.layers({
@@ -197,16 +138,13 @@
             "basemap.at - OVERLAY": layers.bmapoverlay,
             "basemap.at - HIGH-DPI": layers.bmaphidpi,
             "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
-            "OpenStreetMap": layers.osm,
-			"Luftbild": layers.Luftbild,
+            "OpenStreetMap": layers.osm
         },{
             "Standorte": punkte,
             "Standorte Citybike": citybikePunkte,
-            "Wanderwege": wanderwegePunkte,
-			"Markt": MarktWien,
-        }).addTo(map);
-		map.locate({setView: true, maxZoom: 16});
-		L.geoJSON(window.my_geojson).addTo(map);
+            "Wanderwege": wanderwegePunkte
+	    //"Markt": MarktWien
+        }).addTo(map)
     </script>
 
 </body>
