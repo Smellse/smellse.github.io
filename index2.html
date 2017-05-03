@@ -10,7 +10,7 @@
     <script src="stadtspaziergang_punkte.geojson.js">    </script>
     <script src="CITYBIKEOGD.js">    </script>
     <script src="wanderwege_punkte.js"></script>
-	
+	<script src="Markt_Wien.js"></script>
 
     <style>
         h1 {
@@ -58,7 +58,11 @@
             osm: L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 subdomains: ['a', 'b', 'c'],
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            })
+            }),
+			Luftbild: L.tileLayer('http://maps1.wien.gv.at/wmts/lb1956/{Style}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpeg'', {
+            //subdomains: ['a', 'b', 'c'],
+            attribution: 'Datenquelle: <a href="http://maps1.wien.gv.at">Luftbild</a>'
+            }),
         };
 
         // Karte definieren und Ausschnitt setzen
@@ -74,6 +78,18 @@
             metric: true,
             imperial: false
         }).addTo(map);
+		
+		
+		//var IconCity = L.iconCity({
+			//iconUrl: 'http://www.data.wien.gv.at/icons/citybike.png',
+			//iconSize: [38, 95],
+			//iconAnchor: [22, 94],
+			//popupAnchor: [-3, -76],
+			//shadowUrl: 'https://unpkg.com/leaflet@1.0.3/dist/images/marker-shadow.png',
+			//shadowSize: [68, 95],
+			//shadowAnchor: [22, 94]
+			//});
+			//L.marker([50.505, 30.57], {icon: IconCity}).addTo(map);
 
         var iconByCategory = {
             1: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png",
@@ -82,6 +98,7 @@
             4: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-orange.png",
             5: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png",
             6: "https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-violet.png"
+			
         };
         var punkte = L.geoJSON(window.spaziergangPunkte, {
             pointToLayer: function(feature, latlng) {
@@ -102,8 +119,21 @@
 
 
         var citybikePunkte = L.geoJSON(window.citybikePunkte, {
-
+			icon: L.iconCity({
+            iconUrl: 'http://www.data.wien.gv.at/icons/citybike.png',
+			iconSize: [38, 95],
+			iconAnchor: [22, 94],
+			popupAnchor: [-3, -76],
+			shadowUrl: 'https://unpkg.com/leaflet@1.0.3/dist/images/marker-shadow.png',
+			shadowSize: [68, 95],
+			shadowAnchor: [22, 94]
+			});
+                
         }).bindPopup(function(layer) {
+            var tipp = '<h3>' + layer.feature.properties.STATION + '</h3>';
+            tipp += '<a href="' + layer.feature.properties.BEZIRK + '">Infos</a>';
+            return tipp;
+        }).addTo(map);
             return layer.feature.properties.STATION;
         }).addTo(map);
 
@@ -125,11 +155,23 @@
             return tipp;
         }).addTo(map);
 		
-	//var MarktWien = L.geoJSON(window.Markt_Wien, {
-
-       // }).bindPopup(function(layer) {
-          //  return layer.feature.properties.INFOS_NACHHALTIG;
-        //}).addTo(map);
+		 var MarktWien = L.geoJSON(window.Markt_Wien, {
+			style: function(feature){
+			var farbe = "";
+                if (feature.properties.INFOS_NACHHALTIG == "Flohmarkt") {
+                  farbe = "yellow"
+                } else {
+                  farbe = "green"
+				}
+                return {
+                color: farbe
+                }
+        
+		}).bindPopup(function(layer) {
+         var tipp = '<h3>' + layer.feature.properties.NAME + '</h3>';
+            tipp += '<a href="' + layer.feature.properties.URL_NACHHALTIG + '">Infos</a>';
+            return tipp;
+        }).addTo(map);
 
         // WMTS-Layer Auswahl und Marker Auswahl Overlay hinzufügen
         L.control.layers({
@@ -138,12 +180,13 @@
             "basemap.at - OVERLAY": layers.bmapoverlay,
             "basemap.at - HIGH-DPI": layers.bmaphidpi,
             "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
-            "OpenStreetMap": layers.osm
+            "OpenStreetMap": layers.osm,
+			"Luftbild": layers.Luftbild,
         },{
             "Standorte": punkte,
             "Standorte Citybike": citybikePunkte,
-            "Wanderwege": wanderwegePunkte
-	    //"Markt": MarktWien
+            "Wanderwege": wanderwegePunkte,
+			"Markt": MarktWien
         }).addTo(map)
     </script>
 
