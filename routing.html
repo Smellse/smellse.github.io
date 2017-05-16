@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Leaflet Routing Machine Example</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="leaflet-routing-machine.css" />
+	<script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+    <script src="leaflet-routing-machine.js"></script>
+    
+	<style>
+        .map {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+ <h1>Stadtspaziergang Wien</h1>
+
+    <div id="wienMap"></div>
+    <h3>Quelle Geodaten</h3>
+    <p>
+    Stadt Wien – <a href="http://data.wien.gv.at/">data.wien.gv.at</a><br>
+    <a href="">Web Feature Service (WFS) - Wien</a><br>
+    CC BY 3.0 Österreich<br>
+    </p>
+    
+	<script>
+	  var layers = {
+            geolandbasemap: L.tileLayer("https://{s}.wien.gv.at/basemap/geolandbasemap/normal/google3857/{z}/{y}/{x}.png", {
+                subdomains: ['maps', 'maps1', 'maps2', 'maps3', 'maps4'],
+                attribution: 'Datenquelle: <a href="http://www.basemap.at/">basemap.at</a>'
+            }),
+	 L.control.scale({
+            maxWidth: 200,
+            metric: true,
+            imperial: false
+        }).addTo(map);
+	
+		  
+		  var map = L.map('wienMap', {
+            layers: [layers.bmapgrau],
+            center: [48.20833, 16.373064],
+            zoom: 12
+        });
+	L.Routing.control({
+		waypoints: [
+        L.latLng(47.26865960000001, 11.393277799999964),
+        L.latLng(48.2083206, 16.376745099999994)
+    ],
+    routeWhileDragging: true
+	}).addTo(map);
+	
+	</script>	
+</body>
+</html>
