@@ -79,6 +79,16 @@
         // leaflet-hash aktivieren
         var hash = new L.Hash(map);
 		L.geoJSON(window.etappe21).addTo(map);
+		//icons von https://mapicons.mapsmarker.com/
+		var huts = [
+			L.marker([47.20073,10.47884], { title: "Württemberger Haus", icon: L.icon( {iconUrl: 'icons/cabin.png'}) }),
+			L.marker([47.21060,10.53520], { title: "Memminger Hütte", icon: L.icon( {iconUrl: 'icons/cabin.png'}) }),
+		];
+		var hutsLayer = L.featureGroup();
+		for (var i=0; i<huts.length; i++) {
+			hutsLayer.addLayer(huts[i]);
+		}
+		hutsLayer.addTo(map);
     </script>
 
 </body>
