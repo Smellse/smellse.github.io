@@ -8,9 +8,13 @@
     <title>basemap.at mit leaflet-hash Plugin</title>
 
     <link rel="stylesheet" href="js/leaflet/leaflet.css" />
+	<link rel="js/leaflet.elevation/leaflet.elevation-0.0.4.css" />
+	
     <script src="js/leaflet/leaflet.js"></script>
     <script src="js/leaflet-hash/leaflet-hash.js"></script>
 	<script src="data/adlerwegetappe21.js"></script>
+	<script src="js/leaflet.elevation/leaflet.elevation-0.0.4.min.js"></script>
+	<script src="https://d3js.org/d3.v3.min.js" charset="utf-8""></script>
 
     <style>
         body {
@@ -78,7 +82,12 @@
         }).addTo(map);
         // leaflet-hash aktivieren
         var hash = new L.Hash(map);
-		L.geoJSON(window.etappe21).addTo(map);
+		
+		var el = L.control.elevation();
+		el.addTo(map);
+		L.geoJSON(window.etappe21, {
+			onEachFeature: el.addData.bind(el)
+		 }).addTo(map);
 		//icons von https://mapicons.mapsmarker.com/
 		var huts = [
 			L.marker([47.20073,10.47884], { title: "Württemberger Haus", icon: L.icon( {iconUrl: 'icons/cabin.png'}) }),
@@ -88,7 +97,14 @@
 		for (var i=0; i<huts.length; i++) {
 			hutsLayer.addLayer(huts[i]);
 		}
-		hutsLayer.addTo(map);
+		//hutsLayer.addTo(map);
+		map.on("zoomend", function() {
+			if (map.getZoom() >= 15) {
+				map.addLayer(hutsLayer);
+				} else {
+				map.removeLayer(hutsLayer);
+			}
+		});
     </script>
 
 </body>
