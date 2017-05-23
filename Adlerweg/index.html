@@ -99,13 +99,17 @@
 		 }).addTo(map);
 		//icons von https://mapicons.mapsmarker.com/
 		var huts = [
-			L.marker([47.20073,10.47884], { title: "Württemberger Haus", icon: L.icon( {iconUrl: 'icons/cabin.png'}) }),
+			L.marker([47.20050,10.47859], { title: "Württemberger Haus", icon: L.icon( {iconUrl: 'icons/cabin.png'}) }),
 			L.marker([47.21060,10.53520], { title: "Memminger Hütte", icon: L.icon( {iconUrl: 'icons/cabin.png'}) }),
 		];
 		var hutsLayer = L.featureGroup();
 		for (var i=0; i<huts.length; i++) {
 			hutsLayer.addLayer(huts[i]);
 		}
+                var wandern = [
+			L.marker([47.19304,10.49587]), { title: "Wandern auf dem Adlerweg: Etappe 21", icon: L.icon( {iconUrl: 'icons/hiking.png'}) }),
+			.addTo(map);
+			
 		//hutsLayer.addTo(map);
 		map.on("zoomend", function() {
 			if (map.getZoom() >= 15) {
