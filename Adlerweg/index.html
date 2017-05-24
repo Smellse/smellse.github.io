@@ -101,9 +101,50 @@
 		
 		).toFixed(0);
 		console.log(dist);
-		    var delta = [pts[i][2] - pts[i-1][2];
+		 var delta = pts[i][2] - pts[i-1][2];
 		console.log(delta,"Höhenmeter auf", dist, "m Strecke");		 
 	    }
+	       var rad = Math.atan(delta/dist);
+		var deg = (rad * (180/ Math.PI)).to Fixed(1);
+		console.log(deg);
+	//colorbrewer		      
+		var rot = ["#ab2524", "#a02128", "#a1232b", "#8d1d2c", "#701f29", "#5e2028"];
+		var gruen = ["#42EB00", "#38C400", "#288F00", "#195700", "#0A2400"];
+		console.log(rot);
+		  //rot ['#fee5d9','#fcbba1','#fc9272','#fb6a4a','#de2d26','#a50f15']
+		  // blau ['#f1eef6','#d0d1e6','#a6bddb','#74a9cf','#2b8cbe','#045a8d']
+		  
+
+		var farbe;
+		switch(true) { // checks if condition is true, not for certain values of a variable
+    			case (deg >= 20) :  farbe = "#bd0026"; break;
+    			case (deg >= 15) :  farbe = "#f03b20"; break;
+   		        case (deg >= 10) :  farbe = "#fd8d3c"; break;
+    			case (deg >= 5) :  farbe = "#feb24c"; break;
+   			case (deg >= 1) :  farbe = "#fed976"; break;
+    			case (deg >= -1) :  farbe = "yellow"; break;
+    			case (deg >= -5) :  farbe = "#d9f0a3"; break;
+    			case (deg >=-10) :  farbe = "#addd8e"; break;
+    			case (deg >=-15) :  farbe = "#78c679"; break;
+    			case (deg >= -20) :  farbe = "#31a354"; break;
+    			case (deg < -20) :  farbe = "#006837"; break;
+			}
+		    console.log(deg,farbe);
+		    
+		    // Linie zeichnen
+		                         
+                 var pointA = new L.LatLng([pts[i][1],pts[i] [0] ),;
+        	 var pointB = new L.LatLng([pts[i-1][1],pts[i-1] [0]);
+        	 var pointList = [pointA, pointB];
+   		 var firstpolyline = new L.Polyline(pointList, {
+                    color: 'red',
+                    weight: 6,
+                    opacity: 0.5,
+                    smoothFactor: 1
+                   });
+    
+      firstpolyline.addTo(map);
+			      
         // leaflet-hash aktivieren
         var hash = new L.Hash(map);
 		var etappe = omnivore.gpx('data/AdlerwegEtappe21.gpx').addTo(map);
@@ -116,7 +157,7 @@
 		//icons von https://mapicons.mapsmarker.com/
 	    //popup laden
 	        var markup = '<h3>Adlerweg-Etappe 21: Württemberger Haus – Memminger Hütte</h3>';
-            markup += '<p> Ettape 21 geht vom Württemberger Haus zur Memminger Hütte. Steinböcke gelten, so wie das Edelweiß, als ein Symbol der Alpen. Entlang dieser Adlerweg-Etappe zur Memminger Hütte ergeben sich immer wieder Möglichkeiten, Steinböcke in freier Natur zu beobachten.Von der Hütte auf einem Steig zunächstein kurzes Stück hinunter. Dann werden sanft ansteigend Wiesenhänge und einSchuttkar gequert, ehe der Steig mitunter steil durch eine felsdurchsetzte Grasflanke (eine seilversicherte Stelle) zum Grat leitet. Nun links und rechts des Grats fast eben nach Norden zum Gipfel der Großbergspitze (Holzkreuz). Von der Großbergspitze führt die Route am Gratrücken ein kleines Stück sanft hinab. Ein Felsriegel wird – ansteigend – mit Hilfe von Drahtseilen überwunden, anschließend mit wenigen Schritten nach oben zum Großbergkopf. Jetzt geht es links vom Grat auf dem schottrigen Steig recht abschüssig und ausgesetzt wieder hinunter und vorbei am Großbergjoch. Danach werden – zunächst weiter absteigend – Wiesenhänge gequert, bis der Steig erneut hinaufzieht. Er quert ein Schuttkar und führt zum Schluss steiler empor zur Seescharte. Von dort auf der anderen Seite durch Schutt, Geröll und auf erdigem Boden hinab. Der Steig leitet oberhalb einer kleinen Schlucht entlang und führt ins Wiesengelände. Schließlich vorbei am größten See im Bereich der Hütte ans Etappenziel</p>'
+            markup += '<p> Ettape 21 geht vom Württemberger Haus zur Memminger Hütte. Steinböcke gelten, so wie das Edelweiß, als ein Symbol der Alpen. Entlang dieser Adlerweg-Etappe zur Memminger Hütte ergeben sich immer wieder Möglichkeiten, Steinböcke in freier Natur zu beobachten.Von der Hütte auf einem Steig zunächstein kurzes Stück hinunter. Dann werden sanft ansteigend Wiesenhänge und einSchuttkar gequert, ehe der Steig mitunter steil durch eine felsdurchsetzte Grasflanke (eine seilversicherte Stelle) zum Grat leitet. Nun links und rechts des Grats fast eben nach Norden zum Gipfel der Großbergspitze (Holzkreuz). Von der Großbergspitze führt die Route am Gratrücken ein kleines Stück sanft hinab. Ein Felsriegel wird – ansteigend – mit Hilfe von Drahtseilen überwunden, anschließend mit wenigen Schritten nach oben zum Großbergkopf. Jetzt geht es links vom Grat auf dem schottrigen Steig recht abschüssig und ausgesetzt wieder hinunter und vorbei am Großbergjoch. Danach werden – zunächst weiter absteigend – Wiesenhänge gequert, bis der Steig erneut hinaufzieht. Er quert ein Schuttkar und führt zum Schluss steiler empor zur Seescharte. Von dort auf der anderen Seite durch Schutt, Geröll und auf erdigem Boden hinab. Der Steig leitet oberhalb einer kleinen Schlucht entlang und führt ins Wiesengelände. Schließlich vorbei am größten See im Bereich der Hütte ans Etappenziel</p>';
             markup += '<li>Ausgangspunkt: Württemberger Haus</li>';
             markup += '<li>Endpunkt: Memminger Hütte</li>';
             markup += '<li>Höhenmeter bergauf: 670</li>';
@@ -129,6 +170,7 @@
             //markup += '<li><a href="http://www.tirol.at/reisefuehrer/sport/wandern/wandertouren/a-adlerweg-etappe-1-st-johann-gaudeamushuette">Weitere Informationen</a></li>';
             gpxTrack.bindPopup(markup, { maxWidth : 450 });
 	        
+	      	      
 		var huts = [
 			L.marker([47.20050,10.47859], { title: "Württemberger Haus", icon: L.icon( {iconUrl: 'icons/cabin.png'}) }),
 			L.marker([47.21060,10.53520], { title: "Memminger Hütte", icon: L.icon( {iconUrl: 'icons/cabin.png'}) }),
