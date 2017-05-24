@@ -88,6 +88,22 @@
             "basemap.at - ORTHOFOTO": layers.bmaporthofoto30cm,
             "OpenStreetMap": layers.osm,
         }).addTo(map);
+	    //Stunde 24.05 gpx Punkte anzeigen
+	    var pts = layer.feature.geometry.coordinates;
+	    // Vorschleige
+	    for (var i = 1; i < pts.lenght; i+= 1) {
+		 console.log(pts[i]); //aktueller Punkt
+		 console.log(pts[i-1]); //vorübergehender Punkt  
+		    //Entfernung
+		dist = map.distance (
+			[pts[i][1],pts[i] [0] ],
+			[pts[i-1][1],pts[i-1] [0] ]
+		
+		).toFixed(0);
+		console.log(dist);
+		    var delta = [pts[i][2] - pts[i-1][2];
+		console.log(delta,"Höhenmeter auf", dist, "m Strecke");		 
+	    }
         // leaflet-hash aktivieren
         var hash = new L.Hash(map);
 		var etappe = omnivore.gpx('data/AdlerwegEtappe21.gpx').addTo(map);
@@ -116,7 +132,7 @@
 		var huts = [
 			L.marker([47.20050,10.47859], { title: "Württemberger Haus", icon: L.icon( {iconUrl: 'icons/cabin.png'}) }),
 			L.marker([47.21060,10.53520], { title: "Memminger Hütte", icon: L.icon( {iconUrl: 'icons/cabin.png'}) }),
-			L.marker([47.19304,10.49587]), { title: "Wandern auf dem Adlerweg: Etappe 21", icon: L.icon( {iconUrl: 'icons/hiking.png'}) }),
+			L.marker([47.19304,10.49587], { title: "Wandern auf dem Adlerweg: Etappe 21", icon: L.icon( {iconUrl: 'icons/hiking.png'}) }),
 		
 		];
 		var hutsLayer = L.featureGroup();
