@@ -31,6 +31,10 @@
             height: 100vh;
             width: 100vw;
         }
+		#map {
+		    height: 800px;
+			width: 1000px;
+			}
     </style>
 </head>
 
@@ -38,7 +42,33 @@
     <a href="http://www.tirol.at/reisefuehrer/sport/wandern/adlerweg">Die offizielle Seite zum Adlerweg</a>
     <a href="https://github.com/Smellse/smellse.github.io/edit/master/Adlerweg/index.html">Elisa Jebelean</a>	
     <div id="map"></div>
-
+	<select id="etappen">
+	<option value="AdlerwegEtappe01.gpx">Adlerweg Etappe 01</option> 
+<option value="AdlerwegEtappe02.gpx">Adlerweg Etappe 02</option> 
+<option value="AdlerwegEtappe03.gpx">Adlerweg Etappe 03</option> 
+<option value="AdlerwegEtappe04.gpx">Adlerweg Etappe 04</option> 
+<option value="AdlerwegEtappe05.gpx">Adlerweg Etappe 05</option> 
+<option value="AdlerwegEtappe06.gpx">Adlerweg Etappe 06</option> 
+<option value="AdlerwegEtappe07.gpx">Adlerweg Etappe 07</option> 
+<option value="AdlerwegEtappe08.gpx">Adlerweg Etappe 08</option> 
+<option value="AdlerwegEtappe09.gpx">Adlerweg Etappe 09</option> 
+<option value="AdlerwegEtappe10.gpx">Adlerweg Etappe 10</option> 
+<option value="AdlerwegEtappe11.gpx">Adlerweg Etappe 11</option> 
+<option value="AdlerwegEtappe12.gpx">Adlerweg Etappe 12</option> 
+<option value="AdlerwegEtappe13.gpx">Adlerweg Etappe 13</option> 
+<option value="AdlerwegEtappe14.gpx">Adlerweg Etappe 14</option> 
+<option value="AdlerwegEtappe15.gpx">Adlerweg Etappe 15</option> 
+<option value="AdlerwegEtappe16.gpx">Adlerweg Etappe 16</option> 
+<option value="AdlerwegEtappe17.gpx">Adlerweg Etappe 17</option> 
+<option value="AdlerwegEtappe18.gpx">Adlerweg Etappe 18</option> 
+<option value="AdlerwegEtappe19.gpx">Adlerweg Etappe 19</option> 
+<option value="AdlerwegEtappe20.gpx">Adlerweg Etappe 20</option> 
+<option value="AdlerwegEtappe21.gpx">Adlerweg Etappe 21</option> 
+<option value="AdlerwegEtappe22.gpx">Adlerweg Etappe 22</option> 
+<option value="AdlerwegEtappe23.gpx">Adlerweg Etappe 23</option> 
+<option value="AdlerwegEtappe24.gpx">Adlerweg Etappe 24</option> 
+<option value="AdlerwegEtappe25.gpx">Adlerweg Etappe 25</option>  
+	</select>
     <script>
         // WMTS-Layer basemap.at - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
         var layers = {
@@ -90,16 +120,26 @@
         }).addTo(map);
 		
 		
-		
+		var profileControl = L.control.elevation ({
+		position :'bottomleft',
+		theme: 'lime-theme'
+		});
+		profileControl.addTo(map);
 			      
         // leaflet-hash aktivieren
         var hash = new L.Hash(map);
-		var etappe = omnivore.gpx('data/AdlerwegEtappe21.gpx').addTo(map);
-		
+		// var etappe = omnivore.gpx('data/AdlerwegEtappe21.gpx').addTo(map);
+		profileControl.clear();
 		var profile = L.control.elevation();
+		 
+		 //profileControl.addData(layer.feature);
 		
+		function loadTrack(track) {
+		console.log(track);
+		etappe = omnivore.gpx('data/'+track).addTo(map);
 		
 		etappe.on("ready", function() {
+		map.fitBounds(etappe.getBounds());
 			etappe.eachLayer(function(layer) {
 			profile.addData(layer.feature);
 			console.log("xxx");
@@ -162,7 +202,7 @@
 		  }
 			});
 		});
-		
+		}
 		
 		profile.addTo(map);
 		//icons von https://mapicons.mapsmarker.com/
@@ -200,6 +240,13 @@
 				map.removeLayer(hutsLayer);
 			}
 		});
+		var etappenSelektor = document.getElementById("etappen");
+			etappenSelektor.onchange = function(evt) {
+			console.log("change event", evt);
+			console.log("GPX Track laden: ", etappenSelektor[etappenSelektor.selectedIndex].value);
+			loadTrack(etappenSelektor[etappenSelektor.selectedIndex].value);
+			//loadTrack('AdlerwegEtappe21.gpx')
+			}
     </script>
 
 </body>
