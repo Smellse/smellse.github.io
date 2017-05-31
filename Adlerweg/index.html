@@ -13,10 +13,12 @@
 	
     <script src="js/leaflet/leaflet.js"></script>
     <script src="js/leaflet-hash/leaflet-hash.js"></script>
+	<script src="js/etappeninfo.js"></script>
 	
 	<script src="js/leaflet.elevation/leaflet.elevation-0.0.4.min.js"></script>
 	<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.2.0/leaflet-omnivore.min.js'></script>
+	
 
     <style>
 	h1 {
@@ -44,30 +46,30 @@
     <div id="map"></div>
 	<select id="etappen">
 	<option value="AdlerwegEtappe01.gpx">Adlerweg Etappe 01</option> 
-<option value="AdlerwegEtappe02.gpx">Adlerweg Etappe 02</option> 
-<option value="AdlerwegEtappe03.gpx">Adlerweg Etappe 03</option> 
-<option value="AdlerwegEtappe04.gpx">Adlerweg Etappe 04</option> 
-<option value="AdlerwegEtappe05.gpx">Adlerweg Etappe 05</option> 
-<option value="AdlerwegEtappe06.gpx">Adlerweg Etappe 06</option> 
-<option value="AdlerwegEtappe07.gpx">Adlerweg Etappe 07</option> 
-<option value="AdlerwegEtappe08.gpx">Adlerweg Etappe 08</option> 
-<option value="AdlerwegEtappe09.gpx">Adlerweg Etappe 09</option> 
-<option value="AdlerwegEtappe10.gpx">Adlerweg Etappe 10</option> 
-<option value="AdlerwegEtappe11.gpx">Adlerweg Etappe 11</option> 
-<option value="AdlerwegEtappe12.gpx">Adlerweg Etappe 12</option> 
-<option value="AdlerwegEtappe13.gpx">Adlerweg Etappe 13</option> 
-<option value="AdlerwegEtappe14.gpx">Adlerweg Etappe 14</option> 
-<option value="AdlerwegEtappe15.gpx">Adlerweg Etappe 15</option> 
-<option value="AdlerwegEtappe16.gpx">Adlerweg Etappe 16</option> 
-<option value="AdlerwegEtappe17.gpx">Adlerweg Etappe 17</option> 
-<option value="AdlerwegEtappe18.gpx">Adlerweg Etappe 18</option> 
-<option value="AdlerwegEtappe19.gpx">Adlerweg Etappe 19</option> 
-<option value="AdlerwegEtappe20.gpx">Adlerweg Etappe 20</option> 
-<option value="AdlerwegEtappe21.gpx">Adlerweg Etappe 21</option> 
-<option value="AdlerwegEtappe22.gpx">Adlerweg Etappe 22</option> 
-<option value="AdlerwegEtappe23.gpx">Adlerweg Etappe 23</option> 
-<option value="AdlerwegEtappe24.gpx">Adlerweg Etappe 24</option> 
-<option value="AdlerwegEtappe25.gpx">Adlerweg Etappe 25</option>  
+	<option value="AdlerwegEtappe02.gpx">Adlerweg Etappe 02</option> 
+	<option value="AdlerwegEtappe03.gpx">Adlerweg Etappe 03</option> 
+	<option value="AdlerwegEtappe04.gpx">Adlerweg Etappe 04</option> 
+	<option value="AdlerwegEtappe05.gpx">Adlerweg Etappe 05</option> 
+	<option value="AdlerwegEtappe06.gpx">Adlerweg Etappe 06</option> 
+	<option value="AdlerwegEtappe07.gpx">Adlerweg Etappe 07</option> 
+	<option value="AdlerwegEtappe08.gpx">Adlerweg Etappe 08</option> 
+	<option value="AdlerwegEtappe09.gpx">Adlerweg Etappe 09</option> 
+	<option value="AdlerwegEtappe10.gpx">Adlerweg Etappe 10</option> 
+	<option value="AdlerwegEtappe11.gpx">Adlerweg Etappe 11</option> 
+	<option value="AdlerwegEtappe12.gpx">Adlerweg Etappe 12</option> 
+	<option value="AdlerwegEtappe13.gpx">Adlerweg Etappe 13</option> 
+	<option value="AdlerwegEtappe14.gpx">Adlerweg Etappe 14</option> 
+	<option value="AdlerwegEtappe15.gpx">Adlerweg Etappe 15</option> 
+	<option value="AdlerwegEtappe16.gpx">Adlerweg Etappe 16</option> 
+	<option value="AdlerwegEtappe17.gpx">Adlerweg Etappe 17</option> 
+	<option value="AdlerwegEtappe18.gpx">Adlerweg Etappe 18</option> 
+	<option value="AdlerwegEtappe19.gpx">Adlerweg Etappe 19</option> 
+	<option value="AdlerwegEtappe20.gpx">Adlerweg Etappe 20</option> 
+	<option value="AdlerwegEtappe21.gpx">Adlerweg Etappe 21</option> 
+	<option value="AdlerwegEtappe22.gpx">Adlerweg Etappe 22</option> 
+	<option value="AdlerwegEtappe23.gpx">Adlerweg Etappe 23</option> 
+	<option value="AdlerwegEtappe24.gpx">Adlerweg Etappe 24</option> 
+	<option value="AdlerwegEtappe25.gpx">Adlerweg Etappe 25</option>  
 	</select>
     <script>
         // WMTS-Layer basemap.at - Quelle: http://www.basemap.at/wmts/1.0.0/WMTSCapabilities.xml
@@ -133,6 +135,17 @@
 		var profile = L.control.elevation();
 		 
 		 //profileControl.addData(layer.feature);
+		 function loadTrack(gpxFile) {
+			var ohneGPX = gpxFile.substring(0, gpxFile.lenght-4);
+			var ohneGPX2 = gpxFile.replace(".gpx","");
+			console.log("gpxFile ", ohneGPX );
+			console.log("etappeninfo: ", window.ETAPPENINFO);
+			console.log("info : ", window.ETAPPENINFO[ohneGPX]);
+			//bestehende Linie, farbigen Track löschen?????
+			gpxTrackGroup.clearLayers();
+			coloredLineGroup.clearLayers();
+			profileControl.clear();
+			};
 		
 		function loadTrack(track) {
 		console.log(track);
@@ -176,7 +189,7 @@
 					case (deg >= 15) :  farbe = "#f03b20"; break;
 					case (deg >= 10) :  farbe = "#fd8d3c"; break;
 					case (deg >= 5) :  farbe = "#feb24c"; break;
-				case (deg >= 1) :  farbe = "#fed976"; break;
+					case (deg >= 1) :  farbe = "#fed976"; break;
 					case (deg >= -1) :  farbe = "yellow"; break;
 					case (deg >= -5) :  farbe = "#d9f0a3"; break;
 					case (deg >=-10) :  farbe = "#addd8e"; break;
@@ -191,7 +204,7 @@
 				 var pointA = new L.LatLng(pts[i][1], pts[i][0]);
 				 var pointB = new L.LatLng(pts[i-1][1], pts[i-1][0]);
 				 var pointList = [pointA, pointB];
-			 var firstpolyline = new L.Polyline(pointList, {
+				var firstpolyline = new L.Polyline(pointList, {
 						color: farbe,
 						weight: 6,
 						opacity: 0.5,
